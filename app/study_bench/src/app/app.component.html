@@ -1,4 +1,46 @@
 <div class="h-screen w-screen bg-slate-200 px-20 py-10">
   <div class="font-secondary text-3xl text-purple-700">Secretllama</div>
   <div class="font-primary text-xl">Stay hungry, stay foolish</div>
+
+  <div class="w-full flex">
+    <div class="w-full">
+      <div class="mt-10 w-fit">
+        <div>
+          <label
+          for="formFile"
+          class="mb-2 inline-block  text-blue-500 font-primary"
+          >Default file input example</label
+        >
+        <input
+          class="font-primary relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-secondary-500 bg-blue-400 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-surface transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:me-3 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-e file:border-solid file:border-inherit file:bg-transparent file:px-3  file:py-[0.32rem] file:text-surface focus:border-primary focus:text-gray-700 focus:shadow-inset focus:outline-none dark:border-white/70 dark:text-white  file:dark:text-white"
+          type="file"
+          (change)="saveFile($event)"
+          id="formFile" />
+        </div>
+    
+        <div class="font-primary mt-5">
+          <button [disabled]="!formData" (click)="uploadFile()" class="px-3 py-2 bg-amber-400 rounded-md" >Submit</button>
+        </div>
+       
+      </div>
+    
+      <div class="mt-10 flex flex-col">
+        <ng-container *ngFor="let item of filesList">
+          <button
+            class="font-primary px-3 py-2 border border-purple-400 w-52 rounded-md mt-3 hover:bg-purple-400 hover:text-white"
+            (click)="getSummary(item)"
+          >
+            {{ item }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="w-full">
+
+    </div>
+
+  </div>
+
+  
 </div>

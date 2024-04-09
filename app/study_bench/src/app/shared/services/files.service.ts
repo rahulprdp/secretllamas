@@ -18,12 +18,7 @@ export class FilesService {
     return this._http.post(URL + '/upload',file)
   }
 
-  public getFileSummary(file_name : string){
-    return this._http.post(URL + '/summary',{
-      params : {
-        file_name : file_name
-      }
-      
-    })
+  public getFileSummary(payload : any){
+    return this._http.post(URL + '/summary',payload)
   }
 }

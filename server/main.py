@@ -2,10 +2,14 @@ from flask import Flask, jsonify , request
 import time, requests, os
 import PyPDF2
 
+import transformers
+from transformers import pipeline
+
 ## Global
 # List to store extracted text from PDFs
 extracted_text_list = []
 pdf_directory = 'C:/Users/Starlord/Desktop/secretllamas/pdf'
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
 # Function to extract text from PDF
 def extract_text_from_pdf(pdf_file):
@@ -155,11 +159,31 @@ def upload_file():
 # Function to handle file uploads
 @app.route('/summary', methods=['POST'])
 def get_summary():
-    file_name = request.args.get('file_name')
+    file_name = request.form.get('file_name')
 
-    response_data = {
-        "summary": file_name
-    }
+    file_path =  os.path.join(pdf_directory, file_name)
+
+    input_text = extract_text_from_pdf(file_path)
+
+    # Split the input text into chunks
+    chunk_size = 1000  # Define the maximum number of tokens per chunk
+    chunks = [input_text[i:i+chunk_size] for i in range(0, len(input_text), chunk_size)]
+
+    # List to store individual summaries
+    individual_summaries = []
+
+    # Summarize each chunk separately
+    for chunk in chunks:
+        summary = summarizer(chunk, max_length=130, min_length=30, do_sample=False)
+        individual_summaries.append(summary[0]['summary_text'])
+
+    # Concatenate all individual summaries into a single summary
+    combined_summary = ' '.join(individual_summaries)
+
+    # Create a summary object
+    summary_object = {"summary": combined_summary}
+
+    response_data = summary_object
 
     # Create a JSON response
     response = jsonify(response_data)
